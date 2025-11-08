@@ -9,7 +9,7 @@ from backend.database.mongodb import mongodb_connection
 from backend.database.qdrant_client import qdrant_connection
 from backend.services.embedding_service import embedding_service
 from backend.services.llm_service import gemini_service
-from backend.api.routes import health, documents, search
+from backend.api.routes import health, documents, search, research, sessions
 
 
 @asynccontextmanager
@@ -68,6 +68,8 @@ app.add_middleware(
 app.include_router(health.router, tags=["Health"])
 app.include_router(documents.router, tags=["Documents"])
 app.include_router(search.router, tags=["Search"])
+app.include_router(research.router, tags=["Research"])
+app.include_router(sessions.router, tags=["Sessions"])
 
 
 @app.get("/")
