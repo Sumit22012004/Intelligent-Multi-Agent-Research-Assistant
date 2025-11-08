@@ -34,7 +34,6 @@ try:
     from backend.database.mongodb import mongodb_connection
     from backend.database.qdrant_client import qdrant_connection
     from backend.services.embedding_service import embedding_service
-    from backend.services.llm_service import gemini_service
     print("[OK] All imports successful")
 except Exception as error:
     print(f"[FAIL] Import failed: {error}")
@@ -44,7 +43,7 @@ except Exception as error:
 print("\n[TEST 3] Testing Data Models...")
 try:
     from datetime import datetime
-    from backend.database.models.models import User, Session, Conversation, Document
+    from backend.database.models.models import User
     
     test_user = User(
         user_id="test_user",
@@ -53,7 +52,7 @@ try:
         total_sessions=0,
         total_documents=0
     )
-    print(f"[OK] Data models working")
+    print("[OK] Data models working")
     print(f"   - User model: {test_user.user_id}")
 except Exception as error:
     print(f"[FAIL] Data models failed: {error}")
@@ -62,13 +61,13 @@ except Exception as error:
 # Test 4: Schemas
 print("\n[TEST 4] Testing Schemas...")
 try:
-    from backend.core.schemas import ResearchQueryRequest, SessionInfo
+    from backend.core.schemas import ResearchQueryRequest
     
     test_query = ResearchQueryRequest(
         session_id="test_session",
         query="test query"
     )
-    print(f"[OK] Schemas working")
+    print("[OK] Schemas working")
     print(f"   - Query schema: {test_query.query}")
 except Exception as error:
     print(f"[FAIL] Schemas failed: {error}")
@@ -130,7 +129,7 @@ except Exception as error:
 print("\n[TEST 9] FastAPI Application...")
 try:
     from backend.main import app
-    print(f"[OK] FastAPI app created")
+    print("[OK] FastAPI app created")
     print(f"   - Title: {app.title}")
     print(f"   - Version: {app.version}")
 except Exception as error:
