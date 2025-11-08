@@ -40,13 +40,12 @@ class Document(BaseModel):
     """Uploaded document model."""
     document_id: str
     user_id: str
-    session_id: str
-    filename: str
+    file_name: str
     file_path: str
     file_type: str
-    file_size: int
-    upload_timestamp: datetime
-    processing_status: str
-    chunk_count: int = 0
-    qdrant_ids: list[str] = []
+    file_size: str
+    extraction_method: str
+    chunk_count: str
+    vector_ids: list[str]
+    created_at: str = ""
 

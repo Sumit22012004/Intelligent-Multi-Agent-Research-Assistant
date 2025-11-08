@@ -34,6 +34,7 @@ class Settings(BaseSettings):
     max_upload_size_mb: int
     chunk_size: int
     chunk_overlap: int
+    upload_dir: str
     
     # Backend Configuration
     backend_host: str

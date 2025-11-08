@@ -4,6 +4,7 @@ All data structures used across the application.
 """
 
 from datetime import datetime
+from typing import List
 from pydantic import BaseModel
 
 
@@ -17,11 +18,20 @@ class MessageSchema(BaseModel):
 class DocumentMetadata(BaseModel):
     """Metadata for an uploaded document."""
     document_id: str
-    filename: str
+    file_name: str
     file_type: str
-    file_size: int
-    page_count: int
-    upload_timestamp: datetime
+    file_size: str
+    chunk_count: str
+    created_at: str
+
+
+class DocumentProcessingStatus(BaseModel):
+    """Status of document processing."""
+    document_id: str
+    file_name: str
+    status: str
+    message: str
+    chunk_count: int
 
 
 class ResearchQueryRequest(BaseModel):
@@ -33,7 +43,7 @@ class ResearchQueryRequest(BaseModel):
 class ResearchQueryResponse(BaseModel):
     """Response schema for research queries."""
     answer: str
-    sources: list[str]
+    sources: List[str]
     processing_time: float
     confidence: float
 
@@ -42,15 +52,6 @@ class SessionInfo(BaseModel):
     """Information about a research session."""
     session_id: str
     title: str
-    created_at: datetime
-    updated_at: datetime
+    created_at: str
+    updated_at: str
     message_count: int
-
-
-class DocumentProcessingStatus(BaseModel):
-    """Status of document processing."""
-    document_id: str
-    status: str
-    chunks_created: int
-    processing_time: float
-
