@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: research_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=research_assistant
+    restart: unless-stopped
+
+  qdrant:
+    image: qdrant/qdrant:v1.7.4
+    container_name: research_qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    restart: unless-stopped
+
+  backend:
+    build: .
+    container_name: research_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+      - upload_data:/data/uploads
+      - cache_data:/data/cache
+      - hf_cache:/data/hf_cache
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - PERPLEXITY_API_KEY=${PERPLEXITY_API_KEY}
+      - MONGODB_URI=mongodb://mongodb:27017
+      - MONGODB_DB_NAME=research_assistant
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+    depends_on:
+      - mongodb
+      - qdrant
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
+
+  frontend:
+    build: .
+    container_name: research_frontend
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./:/app
+    environment:
+      - BACKEND_URL=http://backend:8000
+    depends_on:
+      - backend
+    command: streamlit run frontend/app.py --server.port 8501 --server.address 0.0.0.0
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
+  qdrant_data:
+  upload_data:
+  cache_data:
+  hf_cache:
+
